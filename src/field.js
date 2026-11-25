@@ -265,7 +265,7 @@ Field.prototype.applyJsonName = function applyJsonName() {
             var name = opt["json_name"];
             if (name !== this.name && (typeof name !== "string" || !/^[A-Za-z_$][\w$]*$/.test(name) ||
                     util.isReserved(name) || util.isUnsafeProperty(name) ||
-                    Object.prototype.hasOwnProperty.call(Object.prototype, name) || name === "toJSON"))
+                    name in Object.prototype || name === "toJSON"))
                 throw Error("Invalid JSON field name " + JSON.stringify(name) + " on " + this.name);
             this.name = name;
         }
