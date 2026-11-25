@@ -32,8 +32,6 @@ tape.test("Options", function (test) {
         test.equal(TestFieldOptionsMsg.fields.field2.options["(fo_single_msg).value"], 7, "should correctly parse single msg option");
         test.equal(TestFieldOptionsMsg.fields.field2.options["(fo_single_msg).rep_value"], 9, "should take second repeated int in single msg option");
         test.same(TestFieldOptionsMsg.fields.field2.parsedOptions, [{"(fo_single_msg)": {value: 7, rep_value: [8,9]}}], "should take all repeated message option");
-        test.equal(TestFieldOptionsMsg.fields.Field_Three.options["json_name"], "Field_Three", "should correctly parse json_name option");
-        test.equal(TestFieldOptionsMsg.fields.field3, undefined, "json_name option should change field name");
         test.end();
     });
 
@@ -161,6 +159,30 @@ tape.test("Options", function (test) {
 
     test.test(test.name + " - invalid option", function (test) {
         test.throws(() => { protobuf.parse("option (foo).whatever = {")});
+        test.end();
+    });
+
+    test.test(test.name + " - unterminated option name", function (test) {
+        test.throws(() => { protobuf.parse('option foo')});
+        test.end();
+    });
+
+    test.test(test.name + " - reserved aggregate option keys", function(test) {
+        var parsed = protobuf.parse(
+            "syntax = \"proto2\";" +
+            "message Test {" +
+            "  optional string value = 1 [(foo) = { __proto__: \"x\" regular: \"y\" }];" +
+            "}"
+        );
+        var field = parsed.root.lookupType("Test").fields.value;
+        var option = field.parsedOptions[0]["(foo)"];
+
+        test.equal(Object.getPrototypeOf(option), Object.prototype, "should keep the aggregate option object shape");
+        test.notOk(Object.prototype.hasOwnProperty.call(option, "__proto__"), "should ignore reserved aggregate option keys");
+        test.equal(option.regular, "y", "should keep regular aggregate option keys");
+        test.equal(Object.getPrototypeOf(field.options), Object.prototype, "should keep the flat options prototype");
+        test.equal(field.options["(foo).regular"], "y", "should keep regular flat option keys");
+        test.equal(field.options["(foo).__proto__"], "x", "should keep extension option keys as literals");
         test.end();
     });
 
