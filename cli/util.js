@@ -1,7 +1,7 @@
 "use strict";
 var fs       = require("fs"),
     path     = require("path"),
-    protobuf = require("@launchql/protobufjs");
+    protobuf = require("@constructive-io/protobufjs");
 
 function basenameCompare(a, b) {
     var aa = String(a).replace(/\.\w+$/, "").split(/(-?\d*\.?\d+)/g),

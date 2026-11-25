@@ -3,7 +3,7 @@ module.exports = json_module;
 
 var util = require("../util");
 
-var protobuf = require("@launchql/protobufjs");
+var protobuf = require("@constructive-io/protobufjs");
 
 json_module.description = "JSON representation as a module";
 

@@ -1,7 +1,7 @@
 "use strict";
 module.exports = proto3_target;
 
-var protobuf = require("@launchql/protobufjs");
+var protobuf = require("@constructive-io/protobufjs");
 
 proto3_target.description = "Protocol Buffers, Version 3";
 
