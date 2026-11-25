@@ -6,7 +6,7 @@ var path     = require("path"),
     pkg      = require("./package.json"),
     util     = require("./util"),
     glob     = require("glob"),
-    protobuf = require("protobufjs");
+    protobuf = require("@launchql/protobufjs");
 
 var targets  = util.requireAll("./targets");
 
@@ -79,7 +79,7 @@ exports.main = function main(args, callback) {
     });
 
     // protobuf.js package directory contains additional, otherwise non-bundled google types
-    paths.push(path.relative(process.cwd(), path.join(__dirname, "../protobufjs")) || ".");
+    paths.push(path.dirname(require.resolve("@launchql/protobufjs/package.json")));
 
     if (!files.length) {
         var descs = Object.keys(targets).filter(function(key) { return !targets[key].private; }).map(function(key) {

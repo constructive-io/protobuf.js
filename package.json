@@ -1,5 +1,5 @@
 {
-  "name": "protobufjs",
+  "name": "@launchql/protobufjs",
   "version": "7.6.6",
   "versionScheme": "~",
   "description": "Protocol Buffers for JavaScript (& TypeScript).",
@@ -31,7 +31,7 @@
     "fs": false
   },
   "publishConfig": {
-    "tag": "latest-7"
+    "access": "public"
   },
   "scripts": {
     "bench": "node bench",

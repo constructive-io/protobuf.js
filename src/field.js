@@ -256,6 +256,22 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
     return ReflectionObject.prototype.setOption.call(this, name, value, ifNotSet);
 };
 
+Field.prototype.applyJsonName = function applyJsonName() {
+    if (this.parsedOptions !== null) {
+        var opt = this.parsedOptions.find(function (opt) {
+            return Object.prototype.hasOwnProperty.call(opt, "json_name");
+        });
+        if (opt) {
+            var name = opt["json_name"];
+            if (name !== this.name && (typeof name !== "string" || !/^[A-Za-z_$][\w$]*$/.test(name) ||
+                    util.isReserved(name) || util.isUnsafeProperty(name) ||
+                    Object.prototype.hasOwnProperty.call(Object.prototype, name) || name === "toJSON"))
+                throw Error("Invalid JSON field name " + JSON.stringify(name) + " on " + this.name);
+            this.name = name;
+        }
+    }
+};
+
 /**
  * Field descriptor.
  * @interface IField
